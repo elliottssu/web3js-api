@@ -42,6 +42,6 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
- 'post /api/account/register':'account.register',
- 'get /api/account/getAccount':'account.getAccount',
+ 'get /api/account/isExitUsername':'account.isExitUsername',
+ 'post /api/account/login':'account.login',
 };
