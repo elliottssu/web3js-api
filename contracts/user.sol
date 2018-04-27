@@ -1,4 +1,4 @@
-pragma solidity ^0.4.16;
+pragma solidity ^0.4.11;
 
 
 contract User {
@@ -35,6 +35,12 @@ contract User {
         return (keccak256(usernames[userListStruct[_username].index]) == keccak256(_username));
     }
 
+    //根据用户名查找对于的address
+    function findUserAddressByUsername(string _username) public constant returns (address userAddress) {
+        require(isExitUsername(_username));
+        return userListStruct[_username].userAddress;
+    }
+
  
     //创建用户信息
     function createUser(address _userAddress, string _username) public returns (uint index) {
@@ -59,10 +65,6 @@ contract User {
             userStruct[_userAddress].index); 
     }
 
-    //根据用户名查找对于的address
-    function findUserAddressByUsername(string _username) public constant returns (address userAddress) {
-        require(isExitUsername(_username));
-        return userListStruct[_username].userAddress;
-    }
+
 
 }

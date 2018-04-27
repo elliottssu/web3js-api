@@ -14,7 +14,10 @@ class Contract {
     static isExitUsername(username, cb) {
         web3Util.contractUser.methods.isExitUsername(username).call()
             .then(result => {
-                cb(result)
+                cb(null, result)
+            })
+            .catch(err => {
+                cb(err.message)
             });
     }
 
@@ -25,10 +28,10 @@ class Contract {
     static findUserAddressByUsername(username, cb) {
         web3Util.contractUser.methods.findUserAddressByUsername(username).call()
             .then(result => {
-                cb(result)
+                cb(null, result)
             })
-            .catch(err=>{
-                console.log(err)
+            .catch(err => {
+                cb(err.message)
             });
     }
 
@@ -39,11 +42,11 @@ class Contract {
     static findUser(userAddress, cb) {
         web3Util.contractUser.methods.findUser(userAddress).call()
             .then(result => {
-                cb(result)
+                cb(null, result)
             })
-            .catch(err=>{
-                console.log(err)
-            });;
+            .catch(err => {
+                cb(err.message)
+            });
     }
 
 }

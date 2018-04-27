@@ -10,8 +10,8 @@ module.exports = {
     isExitUsername: (req, res) => {
         let username = req.query.username;
         if (!username) return res.json(Message.errMessage('用户名不能为空'));
-        Contract.isExitUsername(username, (result) => {
-            return res.json(Message.successMessage(null, result));
+        Contract.isExitUsername(username, (err, result) => {
+            Message.handleResult(res, err, result)
         })
     },
 
@@ -20,14 +20,28 @@ module.exports = {
         let account = req.body.account
         let password = req.body.password;
         if (!account || !password) return res.json(Message.errMessage('用户名或密码不能为空'));
+        
         if (Web3.utils.isAddress(account)) { //account is address
-            Contract.findUser(account, (result) => {
-                return res.json(Message.successMessage(null, result));
+
+            Web3Util.unlockAccount(account, password, (err, result) => {
+                if (err) return res.json(Message.errMessage('用户名或密码错误'));
+                Contract.findUser(account, (err, result) => {
+                    Message.handleResult(res, err, result)
+                })
             })
         } else { //account is username
-            Contract.findUserAddressByUsername(account, (result) => {
-                return res.json(Message.successMessage(null, result));
+
+            Contract.findUserAddressByUsername(account, (err, address) => {
+                if (err) return res.json(Message.errMessage('用户名或密码错误'));
+
+                Web3Util.unlockAccount(address, password, (err, result) => {
+                    if (err) return res.json(Message.errMessage('用户名或密码错误'));
+                    Contract.findUser(address, (err, result) => {
+                        Message.handleResult(res, err, result)
+                    })
+                })
             })
+            
         }
     },
 
@@ -45,12 +59,11 @@ module.exports = {
                     callback(null, err)
                 })
             },
-            function (result, callback) {
+            function (result, callback) {  //创建用户 > 生成地址 > 
                 callback(null, result)
             },
         ], (err, result) => {
-            if (err) return res.json(Message.errMessage(err));
-            return res.json(Message.successMessage(null, result));
+            Message.handleResult(res, err, result)
         })
 
 
