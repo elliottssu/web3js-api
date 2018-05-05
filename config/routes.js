@@ -44,4 +44,5 @@ module.exports.routes = {
   ***************************************************************************/
  'get /api/account/isExitUsername':'account.isExitUsername',
  'post /api/account/login':'account.login',
+ 'post /api/account/register':'account.register',
 };

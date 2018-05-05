@@ -24,7 +24,6 @@ class Contract {
     /**
      * 根据用户名查找对于的地址
      */
-
     static findUserAddressByUsername(username, cb) {
         web3Util.contractUser.methods.findUserAddressByUsername(username).call()
             .then(result => {
@@ -38,7 +37,6 @@ class Contract {
     /**
      * 查找用户信息
      */
-
     static findUser(userAddress, cb) {
         web3Util.contractUser.methods.findUser(userAddress).call()
             .then(result => {

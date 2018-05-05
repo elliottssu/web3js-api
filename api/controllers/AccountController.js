@@ -20,7 +20,7 @@ module.exports = {
         let account = req.body.account
         let password = req.body.password;
         if (!account || !password) return res.json(Message.errMessage('用户名或密码不能为空'));
-        
+
         if (Web3.utils.isAddress(account)) { //account is address
 
             Web3Util.unlockAccount(account, password, (err, result) => {
@@ -33,7 +33,6 @@ module.exports = {
 
             Contract.findUserAddressByUsername(account, (err, address) => {
                 if (err) return res.json(Message.errMessage('用户名或密码错误'));
-
                 Web3Util.unlockAccount(address, password, (err, result) => {
                     if (err) return res.json(Message.errMessage('用户名或密码错误'));
                     Contract.findUser(address, (err, result) => {
@@ -41,7 +40,7 @@ module.exports = {
                     })
                 })
             })
-            
+
         }
     },
 
@@ -56,11 +55,17 @@ module.exports = {
         async.waterfall([
             function (callback) { //检查用户名是否存在
                 Contract.isExitUsername(username, (err, result) => {
-                    callback(null, err)
+                    if (result) return res.json(Message.errMessage('用户名已存在'));
+                    callback(null, result)
                 })
             },
-            function (result, callback) {  //创建用户 > 生成地址 > 
-                callback(null, result)
+            function (result, callback) {  //创建用户 > 生成地址
+                Web3.eth.personal.newAccount(password).then(address => {
+                   callback(null, address)
+                })
+            },
+            function (result, callback) {  //合约注册信息
+              
             },
         ], (err, result) => {
             Message.handleResult(res, err, result)
@@ -86,31 +91,8 @@ module.exports = {
 
 
 
-        // Web3.eth.personal.newAccount(password).then(data => {
-        // return res.json(Message.successMessage(null, contractUser));
-        // })
+
     },
-
-
-
-
-
-    /**
-     * 查找账户信息（登陆）
-     */
-    getAccount: (req, res) => {
-        Web3.eth.getBalance("0x36ccF4f3A15F20c820ffff98d2a566aad3571151").then(data => {
-            console.log(data)
-        })
-        // console.log(Web3.eth.accounts.create())
-        // console.log(Web3.eth.accounts.privateKeyToAccount('0x8D71125e3c26dbB597E7a1854b38c08B31181838'))
-        Web3.eth.getAccounts().then(data => {
-            let accounts = data
-            return res.json(Message.successMessage(null, accounts));
-        })
-    },
-    // getAccountInfo
-
 
 };
 
