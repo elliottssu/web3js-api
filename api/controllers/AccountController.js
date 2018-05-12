@@ -51,7 +51,6 @@ module.exports = {
         let username = req.body.username
         let password = req.body.password;
         if (!username || !password) return res.json(Message.errMessage('用户名或密码不能为空'));
-
         async.waterfall([
             function (callback) { //检查用户名是否存在
                 Contract.isExitUsername(username, (err, result) => {
@@ -61,37 +60,22 @@ module.exports = {
             },
             function (result, callback) {  //创建用户 > 生成地址
                 Web3.eth.personal.newAccount(password).then(address => {
-                   callback(null, address)
+                    callback(null, address)
                 })
+                // callback(null, '0x34869b60F061a0840454b687aed5BE810fAB2996')
             },
-            function (result, callback) {  //合约注册信息
-              
+            function (address, callback) {  //解锁主账户并合约注册信息
+                Web3Util.unlockAccount(Web3Util.ACCOUNT_ADDRESS_MAIN, Web3Util.ACCOUNT__PASSWORD_MAIN, (err, result) => {
+                    if (err) return res.json(Message.errMessage(err));
+                    Contract.createUser(address, username, (err, result) => {
+                        if (err) return res.json(Message.errMessage(err));
+                        callback(err, result)
+                    })
+                })
             },
         ], (err, result) => {
             Message.handleResult(res, err, result)
         })
-
-
-        // var myContract = new Web3.eth.Contract([...], '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe', {
-        //     from: '0x1234567890123456789012345678901234567891', // default from address
-        //     gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
-        // });
-        // let contractUser = Web3.eth.contract(Abi.user).at('0xFBA551eB71A12131417Ca029EEbd0950cCC9A0b6')
-        // let contractUser = new Web3.eth.Contract(Abi.user, '0xFBA551eB71A12131417Ca029EEbd0950cCC9A0b6')
-
-        // contractUser.methods.findUser('0x8fEBe8B23f0084edE1bC15608855F2659fFAfeE4').call({})
-        //     .then(result => {
-        //         return res.json(Message.successMessage(null, result));
-        //         // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
-        //     });
-        // let userInfo = contractUser.getUser.call('0x8fEBe8B23f0084edE1bC15608855F2659fFAfeE4') //get
-
-
-
-
-
-
-
     },
 
 };

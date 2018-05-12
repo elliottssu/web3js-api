@@ -47,6 +47,22 @@ class Contract {
             });
     }
 
+    /**
+     * 创建用户信息 (发送合约需要先解锁)
+     */
+    static createUser(userAddress, username, cb) {
+        let options = {
+            from: Web3Util.ACCOUNT_ADDRESS_MAIN, //创建账户用主账号
+        }
+        web3Util.contractUser.methods.createUser(userAddress, username).send(options)
+            .then(result => {
+                cb(null, result)
+            })
+            .catch(err => {
+                cb(err.message)
+            });
+    }
+
 }
 module.exports = Contract;
 

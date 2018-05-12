@@ -1,5 +1,5 @@
 module.exports = {
-  user: [
+  user:  [
     {
       "constant": true,
       "inputs": [
@@ -32,6 +32,25 @@ module.exports = {
         {
           "name": "isIndeed",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_username",
+          "type": "string"
+        }
+      ],
+      "name": "findUserAddressByUsername",
+      "outputs": [
+        {
+          "name": "userAddress",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -82,25 +101,6 @@ module.exports = {
         {
           "name": "index",
           "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_username",
-          "type": "string"
-        }
-      ],
-      "name": "findUserAddressByUsername",
-      "outputs": [
-        {
-          "name": "userAddress",
-          "type": "address"
         }
       ],
       "payable": false,
