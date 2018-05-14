@@ -53,6 +53,7 @@ class Contract {
     static createUser(userAddress, username, cb) {
         let options = {
             from: Web3Util.ACCOUNT_ADDRESS_MAIN, //创建账户用主账号
+            gas: 10000000 //最大的gas数值
         }
         web3Util.contractUser.methods.createUser(userAddress, username).send(options)
             .then(result => {

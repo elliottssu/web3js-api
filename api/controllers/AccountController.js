@@ -62,7 +62,6 @@ module.exports = {
                 Web3.eth.personal.newAccount(password).then(address => {
                     callback(null, address)
                 })
-                // callback(null, '0x34869b60F061a0840454b687aed5BE810fAB2996')
             },
             function (address, callback) {  //解锁主账户并合约注册信息
                 Web3Util.unlockAccount(Web3Util.ACCOUNT_ADDRESS_MAIN, Web3Util.ACCOUNT__PASSWORD_MAIN, (err, result) => {
