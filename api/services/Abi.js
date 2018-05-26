@@ -4,6 +4,25 @@ module.exports = {
       "constant": true,
       "inputs": [
         {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "userAddresses",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "_userAddress",
           "type": "address"
         }
@@ -90,6 +109,10 @@ module.exports = {
       ],
       "name": "findUser",
       "outputs": [
+        {
+          "name": "userAddresses",
+          "type": "address"
+        },
         {
           "name": "username",
           "type": "string"

@@ -5,6 +5,7 @@ contract User {
 
     //定义用户数据结构
     struct UserStruct {
+        address userAddress;
         string username;
         uint time;
         uint index;
@@ -16,7 +17,7 @@ contract User {
         uint index;
     }
 
-    address[] private userAddresses; //所有地址集合
+    address[] public userAddresses; //所有地址集合
     string[] private usernames; //所有用户名集合
     mapping(address => UserStruct) private userStruct; //账户个人信息
 
@@ -47,7 +48,7 @@ contract User {
         require(!isExitUserAddress(_userAddress)); //如果地址已存在则不允许再创建
 
         userAddresses.push(_userAddress); //地址集合push新地址
-        userStruct[_userAddress] = UserStruct(_username, now, userAddresses.length - 1);
+        userStruct[_userAddress] = UserStruct(_userAddress, _username, now, userAddresses.length - 1);
 
         usernames.push(_username); //用户名集合push新用户
         userListStruct[_username] = UserListStruct(_userAddress, usernames.length - 1); //用户所对应的地址集合
@@ -57,9 +58,10 @@ contract User {
 
 
     //获取用户个人信息
-    function findUser(address _userAddress) public constant returns (string username, uint time, uint index) {
+    function findUser(address _userAddress) public constant returns (address userAddresses, string username, uint time, uint index) {
         require(isExitUserAddress(_userAddress));
         return (
+            userStruct[_userAddress].userAddress,
             userStruct[_userAddress].username,
             userStruct[_userAddress].time,
             userStruct[_userAddress].index); 
